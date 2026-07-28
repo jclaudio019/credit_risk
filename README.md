@@ -24,23 +24,27 @@ Run the notebooks in order.
 | --- | --- |
 | `00_data_preparation.ipynb` | Loads the source file and checks required fields. |
 | `01_data_cleaning_and_exploration.ipynb` | Defines the historical target, repairs selected fields, and explores the portfolio. |
-| `02_feature_engineering_and_woe.ipynb` | Creates coarse classes and uses WoE/IV as descriptive screening. |
+| `02_feature_engineering_and_woe.ipynb` | Creates coarse classes and reports full-sample WoE/IV as post-hoc descriptive exploration. |
 | `03_pd_logistic_regression.ipynb` | Compares broader and refined logistic specifications for `P(good)`. |
 | `04_pd_validation_and_scorecard.ipynb` | Converts `P(good)` to PD, reports AUC/Gini and a confusion matrix, and creates an illustrative 300–850 score. |
 
 The refined specification uses grade, term, verification status, interest rate,
-and debt-to-income ratio. Categorical values are one-hot encoded, with
-`grade_G` used as the reference category. The notebooks use a stratified
-80/20 train/test split; preprocessing statistics are learned from training rows
-and then applied to held-out rows.
+and debt-to-income ratio. Categorical values are one-hot encoded with explicit
+reference levels: `grade_G`, `term_ 60 months`, and
+`verification_status_Not Verified`. The unpenalized, full-rank statsmodels
+Logit fit supplies the reported coefficients, odds ratios, and p-values.
+Numeric coefficients are per one training-standard-deviation increase. The
+notebooks use a stratified 80/20 train/test split; preprocessing statistics are
+learned from training rows and then applied to held-out rows.
 
 ## Results
 
-The final notebook is the authority for the executed AUC, Gini, confusion
-matrix, and score distribution. It evaluates discrimination and threshold-based
-classification on a held-out sample, then maps the model output to an
-illustrative score range. No numerical performance claim is repeated here until
-the notebooks have been executed with the local source data.
+The executed refined held-out model reports AUC **0.657617** and Gini
+**0.315234**. At the displayed 0.5 `P(good)` threshold, bad-class recall is
+zero: no held-out bad rows are predicted bad. These figures show limited rank
+ordering and an unsuitable default classification threshold, not a lending
+decision rule. The final notebook maps the model output to an illustrative
+score range using the training score distribution only.
 
 ## Reproducibility
 
@@ -63,7 +67,8 @@ The source dataset is local and is not included in this repository. See
 
 ## Limitations
 
-- `good_bad` is a simplified historical label, not a current underwriting rule.
+- `good_bad` is a simplified historical bad-status proxy, not a fixed
+  performance-horizon default definition or current underwriting rule.
 - The random holdout is useful for this exercise but does not establish
   time-based stability, calibration, fairness, or regulatory suitability.
 - The 300–850 scale is illustrative, not a production scorecard calibration or

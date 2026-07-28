@@ -9,9 +9,10 @@ as `PD = 1 - P(good)`. The work demonstrates a complete notebook workflow from
 source checks through feature review, model fitting, held-out evaluation, and
 an illustrative scorecard layer.
 
-The notebook outputs are the metric authority. They should be executed with the
-local source CSV before quoting AUC, Gini, confusion-matrix counts, or score
-distribution values.
+The executed refined held-out model has AUC **0.657617** and Gini **0.315234**.
+At the displayed 0.5 `P(good)` threshold, bad-class recall is zero: no held-out
+bad rows are predicted bad. This is limited ranking evidence and an unsuitable
+classification threshold, not a lending decision recommendation.
 
 ## Dataset and target
 
@@ -31,14 +32,20 @@ Notebook 01 makes selected data repairs explicit: employment length and term
 are converted to numeric values, dates are parsed, income is filled with the
 sample median, and missing revolving-credit limits use funded amount. Notebook
 02 creates dummy variables and coarse bands, then uses Weight of Evidence and
-Information Value as descriptive feature-screening tools.
+Information Value as post-hoc descriptive exploration over the full historical
+sample. That WoE/IV view did not select the pre-specified refined variables or
+affect the later train/test validation decision.
 
 The logistic-regression workflow compares a broader candidate specification
 with a refined one. The refined raw inputs are grade, term, verification
 status, interest rate, and debt-to-income ratio. The data is split into
 stratified training and held-out sets. Numeric imputation values are calculated
 from the training rows only, categorical variables are one-hot encoded, and
-`grade_G` is dropped as the reference category.
+every refined categorical variable has an explicit reference level: `grade_G`,
+`term_ 60 months`, and `verification_status_Not Verified`. Numeric variables
+are standardized from training statistics, so their coefficients are per one
+training-standard-deviation increase. The unpenalized, full-rank statsmodels
+Logit model supplies coefficients, odds ratios, and p-values.
 
 ## Interpretation and validation
 
@@ -70,7 +77,8 @@ it is not calibrated as a production scorecard.
 
 ## Limitations and next phases
 
-- The source data and target are historical and simplified.
+- The source data and target are historical and simplified; the bad-status
+  proxy does not define a fixed performance horizon.
 - A single random holdout does not demonstrate temporal stability, calibration,
   fairness, governance, or regulatory suitability.
 - The score range is illustrative and does not define approval, pricing, or
