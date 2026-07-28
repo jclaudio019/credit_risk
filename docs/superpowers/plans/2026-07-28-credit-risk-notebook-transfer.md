@@ -13,7 +13,7 @@
 - Target repository: `/Users/joseclaudio/Dev_local/project_potfolio/credit_risk`.
 - Source project: `/Users/joseclaudio/Dev_local/Credit_Risk`.
 - Do not add FastAPI, DuckDB, Python application modules, or an outputs directory.
-- Do not commit, push, or create contributor history during the transfer.
+- Commit implementation work under the existing `jclaudio` Git identity only; do not add Codex attribution or co-author trailers. Do not push.
 - Move only `Data/loan_data_2007_2014.csv` and `Data/LCDataDictionary (1).xlsx`.
 - Exclude all datasets, pickles, saved models, caches, and generated artifacts from Git.
 - Preserve original source notebooks and their outputs; create cleaned copies in the new repository.
@@ -155,8 +155,8 @@ Confirm notebook names, data paths, target semantics, PD inversion, documentatio
 
 - [ ] **Step 4: Inspect Git scope**
 
-Run `git status --short --ignored` and verify that only notebooks, documentation, requirements, and repository metadata are untracked. Confirm no commit exists with `git log`.
+Run `git status --short --ignored` before committing and verify that only the five approved notebooks contain execution changes. After committing, confirm the commit uses the `jclaudio` author/committer identity with no Codex attribution or trailers.
 
 - [ ] **Step 5: Report completion**
 
-Report exact files created, the two moved data files, notebook execution results, validation results, assumptions, and blockers. Leave all work uncommitted.
+Commit the verified notebook outputs, then report exact files created, the two moved data files, notebook execution results, validation results, assumptions, and blockers.
