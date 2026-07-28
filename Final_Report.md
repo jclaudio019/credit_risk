@@ -48,6 +48,11 @@ rank ordering, plus a confusion matrix at a 0.5 probability-of-good-standing
 threshold. Threshold-based counts depend on that chosen threshold and should
 not be read as a lending policy recommendation.
 
+At the displayed 0.5 `P(good)` threshold, no held-out bad rows are predicted
+bad, so bad-class recall is zero. Threshold selection and calibration are
+required before classification use; AUC and Gini still describe ranking
+discrimination.
+
 The final notebook also linearly rescales the held-out model logit to an
 illustrative 300–850 score. The scale is anchored using the training score
 distribution and then applied unchanged to held-out rows. It aids explanation;
