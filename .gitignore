@@ -1,1 +1,13 @@
 .worktrees/
+data/*.csv
+data/*.xlsx
+.ipynb_checkpoints/
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+.DS_Store
+*.pkl
+*.pickle
+*.joblib
