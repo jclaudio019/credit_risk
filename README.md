@@ -44,14 +44,19 @@ probability interpretation, held-out threshold behavior, ROC/AUC, Gini, KS,
 and an illustrative 300–850 scorecard. The model estimates `P(good)` and
 calculates PD explicitly as `1 - P(good)`.
 
+The illustrative score scale is derived from the theoretical per-family
+minimum and maximum model coefficients, including the intercept, rather than
+from the observed training-score distribution.
+
 ## Results
 
-The recorded refined held-out model reports AUC **0.657617** and Gini
-**0.315234**. At the displayed 0.5 `P(good)` threshold, bad-class recall is
-zero: no held-out bad rows are predicted bad. These figures show limited rank
-ordering and an unsuitable default classification threshold, not a lending
-decision rule. The final notebook maps the model output to an illustrative
-score range using the training score distribution only.
+The freshly executed held-out model reports AUC **0.699482203848** and Gini
+**0.398964407696**. At the displayed 0.5 `P(good)` threshold, the confusion
+matrix for actual labels `[0, 1]` is `[[10, 10184], [15, 83048]]`; bad-class
+recall is **10 / 10194 = 0.000980969198**, or approximately **0.10%**. These
+figures show useful but limited rank ordering and an unsuitable default
+classification threshold, not a lending decision rule. The final notebook
+maps the model output to the illustrative score range described above.
 
 ## Reproducibility
 

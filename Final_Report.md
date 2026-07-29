@@ -9,10 +9,12 @@ as `PD = 1 - P(good)`. The work demonstrates a complete notebook workflow from
 source checks through feature review, model fitting, held-out evaluation, and
 an illustrative scorecard layer.
 
-The recorded refined held-out model has AUC **0.657617** and Gini **0.315234**.
-At the displayed 0.5 `P(good)` threshold, bad-class recall is zero: no held-out
-bad rows are predicted bad. This is limited ranking evidence and an unsuitable
-classification threshold, not a lending decision recommendation.
+The freshly executed held-out model has AUC **0.699482203848** and Gini
+**0.398964407696**. At the displayed 0.5 `P(good)` threshold, the confusion
+matrix for actual labels `[0, 1]` is `[[10, 10184], [15, 83048]]`; bad-class
+recall is **10 / 10194 = 0.000980969198**, or approximately **0.10%**. This is
+useful but limited ranking evidence and an unsuitable classification threshold,
+not a lending decision recommendation.
 
 ## Dataset and target
 
@@ -40,8 +42,8 @@ Evidence (WoE) and Information Value (IV), then apply fine and coarse classing
 to ordered and continuous variables. Category definitions, bins, and reference
 levels are derived from training rows and carried unchanged to held-out rows.
 The logistic-regression notebook fits broader and statistically interpretable
-specifications for `P(good)`, reporting coefficients, odds ratios, and
-p-values. The final notebook converts the fitted model into an illustrative
+specifications for `P(good)`, reporting coefficients and p-values. The final
+notebook converts the fitted model into an illustrative
 300–850 scorecard with explicit zero-coefficient reference categories.
 
 ## Interpretation and validation
@@ -52,15 +54,17 @@ rank ordering, plus a confusion matrix at a 0.5 probability-of-good-standing
 threshold. Threshold-based counts depend on that chosen threshold and should
 not be read as a lending policy recommendation.
 
-At the displayed 0.5 `P(good)` threshold, no held-out bad rows are predicted
-bad, so bad-class recall is zero. Threshold selection and calibration are
-required before classification use; AUC and Gini still describe ranking
-discrimination.
+At the displayed 0.5 `P(good)` threshold, 10 of 10,194 held-out bad rows are
+predicted bad, so bad-class recall is approximately 0.10%. Threshold selection
+and calibration are required before classification use; AUC and Gini still
+describe ranking discrimination.
 
-The final notebook also linearly rescales the held-out model logit to an
-illustrative 300–850 score. The scale is anchored using the training score
-distribution and then applied unchanged to held-out rows. It aids explanation;
-it is not calibrated as a production scorecard.
+The final notebook also linearly rescales the model logit to an illustrative
+300–850 score. The endpoints come from the theoretical sum of the minimum and
+maximum coefficient in each feature family, including the intercept, rather
+than from the observed training-score distribution. The resulting mapping is
+then applied unchanged to held-out rows. It aids explanation; it is not
+calibrated as a production scorecard.
 
 ## Notebook map
 
