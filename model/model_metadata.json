@@ -1,0 +1,68 @@
+{
+  "artifact_version": "1.0.0",
+  "held_out_metrics": {
+    "auc": 0.6994822038478581,
+    "bad_detected": 10,
+    "bad_recall": 0.0009809691975671965,
+    "bad_total": 10194,
+    "displayed_p_good_threshold": 0.5,
+    "gini": 0.39896440769571617,
+    "ks": 0.2916524985747112
+  },
+  "library_versions": {
+    "numpy": "2.4.6",
+    "pandas": "2.3.3",
+    "python": "3.12.13",
+    "scikit_learn": "1.9.0",
+    "statsmodels": "0.14.6"
+  },
+  "limitations": [
+    "Historical educational PD proxy without a fixed performance horizon",
+    "Random holdout rather than time-based validation",
+    "Not calibrated as a production probability or scorecard",
+    "Requires the engineered feature schema and does not score raw applications",
+    "Not an underwriting, pricing, approval, or regulatory model"
+  ],
+  "model_contract": {
+    "estimated_feature_count_excluding_intercept": 84,
+    "estimated_parameter_count_including_intercept": 85,
+    "reference_categories": [
+      "grade:G",
+      "home_ownership:RENT_OTHER_NONE_ANY",
+      "addr_state:ND_NE_IA_NV_FL_HI_AL",
+      "verification_status:Verified",
+      "purpose:educ__sm_b__wedd__ren_en__mov__house",
+      "initial_list_status:f",
+      "term:60",
+      "emp_length:0",
+      "mths_since_issue_d:>84",
+      "int_rate:>20.281",
+      "mths_since_earliest_cr_line:Missing_or_<140",
+      "inq_last_6mths:>6",
+      "acc_now_delinq:0",
+      "annual_inc:<=20K",
+      "dti:>35",
+      "mths_since_last_delinq:0-3",
+      "mths_since_last_record:0-2"
+    ]
+  },
+  "model_type": "Unpenalized binary logistic regression (Statsmodels Logit)",
+  "population": {
+    "held_out_rows": 93257,
+    "total_rows": 466285,
+    "training_rows": 373028
+  },
+  "scorecard": {
+    "basis": "Theoretical per-family coefficient extrema including the intercept",
+    "maximum": 850,
+    "minimum": 300
+  },
+  "source_notebook": "notebooks/05_pd_scorecard_and_final_conclusions.ipynb",
+  "target": {
+    "bad_label": 0,
+    "good_label": 1,
+    "model_output": "P(good)",
+    "name": "good_bad",
+    "pd_definition": "1 - P(good)"
+  }
+}
