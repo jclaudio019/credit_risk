@@ -134,7 +134,7 @@ need to resolve.
 - Python, pandas, NumPy, and Jupyter notebooks for preparation and analysis
 - statsmodels for interpretable logistic regression and statistical inference
 - scikit-learn for held-out discrimination metrics and validation utilities
-- Matplotlib and seaborn for exploratory and model-evaluation visuals
+- Matplotlib for exploratory and model-evaluation visuals
 
 ## Notebook map
 
