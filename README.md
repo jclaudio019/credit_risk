@@ -22,24 +22,31 @@ Run the notebooks in order.
 
 | Notebook | Purpose |
 | --- | --- |
-| `00_data_preparation.ipynb` | Loads the source file and checks required fields. |
-| `01_data_cleaning_and_exploration.ipynb` | Defines the historical target, repairs selected fields, and explores the portfolio. |
-| `02_feature_engineering_and_woe.ipynb` | Creates coarse classes and reports full-sample WoE/IV as post-hoc descriptive exploration. |
-| `03_pd_logistic_regression.ipynb` | Compares broader and refined logistic specifications for `P(good)`. |
-| `04_pd_validation_and_scorecard.ipynb` | Converts `P(good)` to PD, reports AUC/Gini and a confusion matrix, and creates an illustrative 300–850 score. |
+| `00_data_understanding_and_preparation.ipynb` | Establishes the source fields, data quality context, and deterministic date conversions. |
+| `01_data_cleaning_and_target_definition.ipynb` | Defines the historical target, applies partition-aware repairs, and creates the train/test split. |
+| `02_discrete_feature_engineering_and_woe.ipynb` | Investigates discrete variables with train-derived WoE/IV and category groupings. |
+| `03_continuous_feature_engineering_and_woe.ipynb` | Performs fine/coarse classing for ordered and continuous predictors. |
+| `04_pd_logistic_regression_and_validation.ipynb` | Fits logistic specifications for `P(good)` and evaluates held-out discrimination and thresholds. |
+| `05_pd_scorecard_and_final_conclusions.ipynb` | Builds the illustrative 300–850 scorecard and interprets held-out account scores. |
 
-The refined specification uses grade, term, verification status, interest rate,
-and debt-to-income ratio. Categorical values are one-hot encoded with explicit
-reference levels: `grade_G`, `term_ 60 months`, and
-`verification_status_Not Verified`. The unpenalized, full-rank statsmodels
-Logit fit supplies the reported coefficients, odds ratios, and p-values.
-Numeric coefficients are per one training-standard-deviation increase. The
-notebooks use a stratified 80/20 train/test split; preprocessing statistics are
-learned from training rows and then applied to held-out rows.
+## Methodology
+
+The workflow begins with data understanding, deterministic cleaning, and the
+historical target definition. It then uses a stratified 80/20 train/test split,
+with imputation statistics, category definitions, and feature bins learned
+from training rows and applied unchanged to held-out rows.
+
+Discrete variables are reviewed with Weight of Evidence (WoE) and Information
+Value (IV); ordered and continuous variables are examined through fine and
+coarse classing. The selected feature families use explicit reference
+categories in logistic regression. The notebooks report coefficients,
+probability interpretation, held-out threshold behavior, ROC/AUC, Gini, KS,
+and an illustrative 300–850 scorecard. The model estimates `P(good)` and
+calculates PD explicitly as `1 - P(good)`.
 
 ## Results
 
-The executed refined held-out model reports AUC **0.657617** and Gini
+The recorded refined held-out model reports AUC **0.657617** and Gini
 **0.315234**. At the displayed 0.5 `P(good)` threshold, bad-class recall is
 zero: no held-out bad rows are predicted bad. These figures show limited rank
 ordering and an unsuitable default classification threshold, not a lending
@@ -51,19 +58,11 @@ score range using the training score distribution only.
 1. Obtain the historical Lending Club CSV and place it at
    `data/loan_data_2007_2014.csv`.
 2. Create an environment and install `pip install -r requirements.txt`.
-3. Run the five notebooks above in numerical order from the `notebooks/`
+3. Run the six notebooks above in numerical order from the `notebooks/`
    directory so their relative data path resolves.
 
 The source dataset is local and is not included in this repository. See
 [`data/README.md`](data/README.md) for the expected location.
-
-## Skills demonstrated
-
-- Data-quality checks and transparent missing-value handling
-- Exploratory analysis and historical target construction
-- Coarse classing, Weight of Evidence, and Information Value
-- Logistic regression, probability interpretation, AUC/Gini, and confusion matrices
-- Clear limits on what a portfolio model can support
 
 ## Limitations
 
@@ -75,10 +74,3 @@ The source dataset is local and is not included in this repository. See
   lending policy.
 - Historical Lending Club data may not represent a current portfolio or lending
   environment.
-
-## Future work
-
-Before any real-world use, assess temporal validation, calibration, drift,
-fairness, monitoring, and governance with appropriate data and review. A
-separate project could explore operational delivery or loss modelling, but
-those capabilities are outside this notebook portfolio.

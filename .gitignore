@@ -1,5 +1,7 @@
 .worktrees/
 docs/superpowers/
+data/processed/
+/recommendations.md
 data/*.csv
 data/*.xlsx
 .ipynb_checkpoints/

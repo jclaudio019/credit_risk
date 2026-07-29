@@ -9,7 +9,7 @@ as `PD = 1 - P(good)`. The work demonstrates a complete notebook workflow from
 source checks through feature review, model fitting, held-out evaluation, and
 an illustrative scorecard layer.
 
-The executed refined held-out model has AUC **0.657617** and Gini **0.315234**.
+The recorded refined held-out model has AUC **0.657617** and Gini **0.315234**.
 At the displayed 0.5 `P(good)` threshold, bad-class recall is zero: no held-out
 bad rows are predicted bad. This is limited ranking evidence and an unsuitable
 classification threshold, not a lending decision recommendation.
@@ -28,24 +28,21 @@ educational target; it is not a current lending decision or policy definition.
 
 ## Method
 
-Notebook 01 makes selected data repairs explicit: employment length and term
-are converted to numeric values, dates are parsed, income is filled with the
-sample median, and missing revolving-credit limits use funded amount. Notebook
-02 creates dummy variables and coarse bands, then uses Weight of Evidence and
-Information Value as post-hoc descriptive exploration over the full historical
-sample. That WoE/IV view did not select the pre-specified refined variables or
-affect the later train/test validation decision.
+The six-notebook workflow begins with data understanding and preparation,
+then defines the historical target and applies cleaning decisions before a
+stratified 80/20 train/test split. Employment length and term are converted to
+numeric values; dates are parsed with a historical-date correction; missing
+revolving-credit limits use funded amount; and annual-income imputation is
+learned from training rows only.
 
-The logistic-regression workflow compares a broader candidate specification
-with a refined one. The refined raw inputs are grade, term, verification
-status, interest rate, and debt-to-income ratio. The data is split into
-stratified training and held-out sets. Numeric imputation values are calculated
-from the training rows only, categorical variables are one-hot encoded, and
-every refined categorical variable has an explicit reference level: `grade_G`,
-`term_ 60 months`, and `verification_status_Not Verified`. Numeric variables
-are standardized from training statistics, so their coefficients are per one
-training-standard-deviation increase. The unpenalized, full-rank statsmodels
-Logit model supplies coefficients, odds ratios, and p-values.
+The feature-engineering notebooks examine discrete variables with Weight of
+Evidence (WoE) and Information Value (IV), then apply fine and coarse classing
+to ordered and continuous variables. Category definitions, bins, and reference
+levels are derived from training rows and carried unchanged to held-out rows.
+The logistic-regression notebook fits broader and statistically interpretable
+specifications for `P(good)`, reporting coefficients, odds ratios, and
+p-values. The final notebook converts the fitted model into an illustrative
+300–850 scorecard with explicit zero-coefficient reference categories.
 
 ## Interpretation and validation
 
@@ -69,23 +66,18 @@ it is not calibrated as a production scorecard.
 
 | Notebook | Contribution |
 | --- | --- |
-| `00_data_preparation.ipynb` | Checks the local source file and required columns. |
-| `01_data_cleaning_and_exploration.ipynb` | Defines `good_bad`, performs selected cleaning, and explores the portfolio. |
-| `02_feature_engineering_and_woe.ipynb` | Builds coarse classes and reviews WoE/IV. |
-| `03_pd_logistic_regression.ipynb` | Fits broader and refined logistic models for `P(good)`. |
-| `04_pd_validation_and_scorecard.ipynb` | Derives PD, evaluates held-out discrimination, and creates the illustrative score view. |
+| `00_data_understanding_and_preparation.ipynb` | Establishes source fields, data quality context, and date preparation. |
+| `01_data_cleaning_and_target_definition.ipynb` | Defines `good_bad`, applies partition-aware cleaning, and creates the split. |
+| `02_discrete_feature_engineering_and_woe.ipynb` | Investigates discrete predictors with WoE/IV and category grouping. |
+| `03_continuous_feature_engineering_and_woe.ipynb` | Applies fine/coarse classing to ordered and continuous predictors. |
+| `04_pd_logistic_regression_and_validation.ipynb` | Fits and validates held-out `P(good)` predictions. |
+| `05_pd_scorecard_and_final_conclusions.ipynb` | Builds the illustrative scorecard and concludes the analysis. |
 
-## Limitations and next phases
+## Limitations
 
 - The source data and target are historical and simplified; the bad-status
   proxy does not define a fixed performance horizon.
 - A single random holdout does not demonstrate temporal stability, calibration,
-  fairness, governance, or regulatory suitability.
+  fairness, or regulatory suitability.
 - The score range is illustrative and does not define approval, pricing, or
   treatment rules.
-- Any practical use would require separate validation, monitoring, governance,
-  and domain review.
-
-Reasonable future analysis would begin with time-based validation and
-calibration assessment, followed by drift and fairness studies. Operational
-delivery or loss modelling are separate future scopes, not implemented here.
