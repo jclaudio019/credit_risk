@@ -4,6 +4,7 @@ data/processed/
 /recommendations.md
 data/*.csv
 data/*.xlsx
+data/*.db
 .ipynb_checkpoints/
 __pycache__/
 *.py[cod]
